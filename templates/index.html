@@ -3,264 +3,447 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Health Care Center</title>
+    <title>MediRec - Medical Recommendation Tool</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
   </head>
 
   <style>
-
-        .logo {
-            width: 50px;
-            height: 50px;
-            color: black;
-            margin-top: 0;
-            margin-left: 2px;
-        }
-
-        .myimg {
-            width: 50px;
-            height: 50px;
-            border: 2px solid black;
-            border-radius: 25px;
-        }
-
-
-
-
-    </style>
+    body {
+        background-color: #f0f4f7;
+        font-family: 'Roboto', sans-serif;
+        color: #333;
+    }
+    .navbar {
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .logo-img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+    }
+    .main-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 5rem 2rem;
+    }
+    .content-wrapper {
+        display: flex;
+        background-color: white;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        overflow: hidden;
+        max-width: 1100px;
+        width: 100%;
+    }
+    .info-panel {
+        background-color: #0d6efd;
+        color: white;
+        padding: 4rem;
+        width: 45%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center; 
+        text-align: center; 
+    }
+    .info-panel h1 {
+        font-weight: 700;
+        font-size: 2.5rem;
+        margin-top: 1rem; 
+    }
+    .info-panel p {
+        font-weight: 300;
+        font-size: 1.1rem;
+        opacity: 0.9;
+    }
+    .info-panel-logo {
+        width: 120px; 
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 1rem; 
+    }
+    .form-panel {
+        padding: 4rem;
+        width: 55%;
+    }
+    .form-panel-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+    }
+    .form-panel h2 {
+        font-weight: 700;
+        color: #0d6efd;
+        margin: 0;
+    }
+    .btn-predict {
+        background-color: #0d6efd;
+        border: none;
+        font-weight: 700;
+        padding: 12px;
+        width: 100%;
+    }
+    .btn-predict:hover {
+        background-color: #0a58ca;
+    }
+    .results-section {
+        padding: 2rem;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        margin-top: 2rem;
+    }
+    .results-section h3 {
+        color: #0d6efd;
+        font-weight: 700;
+    }
+    .result-buttons .btn {
+        margin: 5px;
+        font-weight: bold;
+    }
+    .modal-header {
+      background-color: #0d6efd;
+      color: white;
+    }
+    #symptomsModal .modal-body {
+        max-height: 60vh;
+        overflow-y: auto;
+    }
+    #symptomsTable tbody tr {
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+     #symptomsTable tbody tr .checkmark {
+        visibility: hidden;
+    }
+    #symptomsTable tbody tr.selected {
+        background-color: #e0e0e0;
+    }
+    #symptomsTable tbody tr.selected .checkmark {
+        visibility: visible;
+    }
+    #symptoms-display {
+        border: 1px solid #ced4da;
+        border-radius: .25rem;
+        padding: .375rem .75rem;
+        min-height: 40px;
+        margin-bottom: 1rem;
+        background-color: #e9ecef;
+        color: #495057;
+    }
+  </style>
 </head>
 <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-            <!-- Logo at the top-left corner -->
-            <div class="logo">
-                <img class="myimg" src="{{ url_for('static', filename='img.png') }}" alt="">
-            </div>
-
-            <a class="navbar-brand" href="#">Health Center</a>
+            <a class="navbar-brand d-flex align-items-center" href="/">
+                <img class="logo-img me-2" src="{{ url_for('static', filename='Medirec.png') }}" alt="Logo">
+                <span style="font-weight: 700;">MediRec - Health Recommendation System</span>
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                        <a class="nav-link active" aria-current="page" href="/">Home</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/about">About</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/contact">Contact</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/developer">Developer</a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link" href="/blog">Blog</a>
                     </li>
                 </ul>
-                <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
-                </form>
             </div>
         </div>
     </nav>
 
+    <div class="main-container">
+        <div class="content-wrapper">
+            <div class="info-panel">
+                <img class="info-panel-logo" src="{{ url_for('static', filename='Medirec.png') }}" alt="MediRec Logo">
+                <h1>MediRec</h1>
+                <p>ML-powered Medical Recommendation tool to get a preliminary analysis of your symptoms. For first aid only, if symptoms persist, kindly contact the nearest Doctor.</p>
+            </div>
 
-
-
-<!-- main form of page -->
-<h1 class="mt-4 my-4 text-center text-green">Health Care Center</h1>
-<div class="container my-4 mt-4" style="background: black; color: white; border-radius: 15px; padding: 40px;">
-    <form action="/predict" method="post">
-        <div class="form-group">
-            <label for="symptoms">Select Symptoms:</label>
-            <input type="text" class="form-control", id="symptoms" name="symptoms" placeholder="type systems such as itching, sleeping, aching etc">
-
-        </div>
-        <br>
-        <button type="button" id="startSpeechRecognition" class="btn btn-primary" style="margin-left:3px;border:1px solid white; border-radius:20px;">
-            Start Speech Recognition
-        </button>
-        <br>
-
-        <!-- Display the transcribed text here -->
-        <div name="mysysms" id="transcription"></div>
-
-        {% if message %}
-        <p>{{ message }}</p>
-        {% endif %}
-        <br>
-
-        <button type="submit" class="btn btn-danger btn-lg" style="width: 100%; padding: 14px; margin-bottom: 5px;">Predict</button>
-    </form>
-</div>
-
-
-
-
-
-
-
-
-{% if predicted_disease %}
-
-<!-- Results -->
-<h1 class="text-center my-4 mt-4">Our AI System Results</h1>
-<div class="container">
-
-    <div class="result-container">
-        <!-- Buttons to toggle display -->
-        <button class="toggle-button" data-bs-toggle="modal" data-bs-target="#diseaseModal" style="padding:4px;  margin: 5px 40px 5px 0; font-size:20px;font-weight:bold; width:140px; border-radius:5px; background:#F39334;color:black;">Disease</button>
-        <button class="toggle-button" data-bs-toggle="modal" data-bs-target="#descriptionModal" style="padding:4px; margin: 5px 40px 5px 0; font-size:20px;font-weight:bold; width:140px; border-radius:5px; background:#268AF3 ;color:black;">Description</button>
-        <button class="toggle-button" data-bs-toggle="modal" data-bs-target="#precautionModal" style="padding:4px; margin: 5px 40px 5px 0; font-size:20px;font-weight:bold; width:140px; border-radius:5px; background:#F371F9 ;color:black;">Precaution</button>
-        <button class="toggle-button" data-bs-toggle="modal" data-bs-target="#medicationsModal" style="padding:4px; margin: 5px 40px 5px 0; font-size:20px;font-weight:bold; width:140px;border-radius:5px; background:#F8576F ;color:black;">Medications</button>
-        <button class="toggle-button" data-bs-toggle="modal" data-bs-target="#workoutsModal" style="padding:4px; margin: 5px 40px 5px 0; font-size:20px;font-weight:bold; width:140px; border-radius:5px; background:#99F741 ;color:black;">Workouts</button>
-        <button class="toggle-button" data-bs-toggle="modal" data-bs-target="#dietsModal" style="padding:4px; margin: 5px 40px 5px 0; font-size:20px;font-weight:bold; width:140px; border-radius:5px; background:#E5E23D;color:black;">Diets</button>
-    </div>
-</div>
-
-{% endif %}
-
-<!-- Disease Modal -->
-    <div class="modal fade" id="diseaseModal" tabindex="-1" aria-labelledby="diseaseModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header" style="background-color: #020606; color:white;"> <!-- Set header background color inline -->
-                    <h5 class="modal-title" id="diseaseModalLabel">Predicted Disease</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="form-panel">
+                <div class="form-panel-header">
+                    <h2>Your Symptoms</h2>
+                    <a class="btn btn-outline-secondary btn-sm" href="#" data-bs-toggle="modal" data-bs-target="#symptomsModal">Select From List</a>
                 </div>
-                <div class="modal-body" style="background-color: #modal-body-color"> <!-- Set modal body background color inline -->
-                    <p>{{ predicted_disease }}</p>
-                </div>
+                <form action="/predict" method="post">
+                    <div class="mb-3">
+                        <label class="form-label">Please select your symptoms from the list.</label>
+                        <div id="symptoms-display"></div>
+                        <input type="hidden" id="symptoms" name="symptoms">
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg btn-predict" id="predict-btn" disabled>Predict</button>
+                    </div>
+                    {% if message %}
+                    <p class="text-danger mt-3">{{ message }}</p>
+                    {% endif %}
+                </form>
             </div>
         </div>
     </div>
 
+    {% if predicted_disease %}
+    <div class="container pb-5">
+        <div class="results-section text-center">
+            <h3>Our AI System Results</h3>
+            <p><strong>Predicted Condition:</strong> {{ predicted_disease }}</p>
+            <div class="result-buttons">
+                <button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#descriptionModal">Description</button>
+                <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#precautionModal">Precautions</button>
+                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#medicationsModal">Medications</button>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#workoutsModal">Workouts</button>
+                <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#dietsModal">Diets</button>
+            </div>
+        </div>
+    </div>
+    {% endif %}
 
-    <!-- Description Modal -->
-    <div class="modal fade" id="descriptionModal" tabindex="-1" aria-labelledby="descriptionModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+    <div class="modal fade" id="descriptionModal" tabindex="-1"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h5 class="modal-title">Description</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div><div class="modal-body"><p>{{ dis_des }}</p></div></div></div></div>
+    <div class="modal fade" id="precautionModal" tabindex="-1"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h5 class="modal-title">Precautions</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div><div class="modal-body"><ul>{% for i in my_precautions %}<li>{{ i }}</li>{% endfor %}</ul></div></div></div></div>
+    <div class="modal fade" id="medicationsModal" tabindex="-1"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h5 class="modal-title">Medications</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div><div class="modal-body"><ul>{% for i in medications %}<li>{{ i }}</li>{% endfor %}</ul></div></div></div></div>
+    <div class="modal fade" id="workoutsModal" tabindex="-1"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h5 class="modal-title">Workouts</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div><div class="modal-body"><ul>{% for i in workout %}<li>{{ i }}</li>{% endfor %}</ul></div></div></div></div>
+    <div class="modal fade" id="dietsModal" tabindex="-1"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h5 class="modal-title">Diets</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div><div class="modal-body"><ul>{% for i in my_diet %}<li>{{ i }}</li>{% endfor %}</ul></div></div></div></div>
+
+    <div class="modal fade" id="symptomsModal" tabindex="-1" aria-labelledby="symptomsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <div class="modal-header" style="background-color: #020606; color:white;">
-                    <h5 class="modal-title" id="descriptionModalLabel">Description</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="symptomsModalLabel">Complete Symptom List</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p>{{ dis_des }}</p>
+                    <input type="text" id="symptomSearch" onkeyup="searchSymptoms()" placeholder="Search for symptoms.." class="form-control mb-4">
+                    <table class="table table-striped table-hover" id="symptomsTable">
+                        <thead><tr><th>Symptom Name</th></tr></thead>
+                        <tbody onclick="toggleSymptom(event)">
+                            <tr><td>itching</td><td class="checkmark">✅</td></tr>
+                            <tr><td>skin_rash</td><td class="checkmark">✅</td></tr>
+                            <tr><td>nodal_skin_eruptions</td><td class="checkmark">✅</td></tr>
+                            <tr><td>continuous_sneezing</td><td class="checkmark">✅</td></tr>
+                            <tr><td>shivering</td><td class="checkmark">✅</td></tr>
+                            <tr><td>chills</td><td class="checkmark">✅</td></tr>
+                            <tr><td>joint_pain</td><td class="checkmark">✅</td></tr>
+                            <tr><td>stomach_pain</td><td class="checkmark">✅</td></tr>
+                            <tr><td>acidity</td><td class="checkmark">✅</td></tr>
+                            <tr><td>ulcers_on_tongue</td><td class="checkmark">✅</td></tr>
+                            <tr><td>muscle_wasting</td><td class="checkmark">✅</td></tr>
+                            <tr><td>vomiting</td><td class="checkmark">✅</td></tr>
+                            <tr><td>burning_micturition</td><td class="checkmark">✅</td></tr>
+                            <tr><td>spotting_urination</td><td class="checkmark">✅</td></tr>
+                            <tr><td>fatigue</td><td class="checkmark">✅</td></tr>
+                            <tr><td>weight_gain</td><td class="checkmark">✅</td></tr>
+                            <tr><td>anxiety</td><td class="checkmark">✅</td></tr>
+                            <tr><td>cold_hands_and_feets</td><td class="checkmark">✅</td></tr>
+                            <tr><td>mood_swings</td><td class="checkmark">✅</td></tr>
+                            <tr><td>weight_loss</td><td class="checkmark">✅</td></tr>
+                            <tr><td>restlessness</td><td class="checkmark">✅</td></tr>
+                            <tr><td>lethargy</td><td class="checkmark">✅</td></tr>
+                            <tr><td>patches_in_throat</td><td class="checkmark">✅</td></tr>
+                            <tr><td>irregular_sugar_level</td><td class="checkmark">✅</td></tr>
+                            <tr><td>cough</td><td class="checkmark">✅</td></tr>
+                            <tr><td>high_fever</td><td class="checkmark">✅</td></tr>
+                            <tr><td>sunken_eyes</td><td class="checkmark">✅</td></tr>
+                            <tr><td>breathlessness</td><td class="checkmark">✅</td></tr>
+                            <tr><td>sweating</td><td class="checkmark">✅</td></tr>
+                            <tr><td>dehydration</td><td class="checkmark">✅</td></tr>
+                            <tr><td>indigestion</td><td class="checkmark">✅</td></tr>
+                            <tr><td>headache</td><td class="checkmark">✅</td></tr>
+                            <tr><td>yellowish_skin</td><td class="checkmark">✅</td></tr>
+                            <tr><td>dark_urine</td><td class="checkmark">✅</td></tr>
+                            <tr><td>nausea</td><td class="checkmark">✅</td></tr>
+                            <tr><td>loss_of_appetite</td><td class="checkmark">✅</td></tr>
+                            <tr><td>pain_behind_the_eyes</td><td class="checkmark">✅</td></tr>
+                            <tr><td>back_pain</td><td class="checkmark">✅</td></tr>
+                            <tr><td>constipation</td><td class="checkmark">✅</td></tr>
+                            <tr><td>abdominal_pain</td><td class="checkmark">✅</td></tr>
+                            <tr><td>diarrhoea</td><td class="checkmark">✅</td></tr>
+                            <tr><td>mild_fever</td><td class="checkmark">✅</td></tr>
+                            <tr><td>yellow_urine</td><td class="checkmark">✅</td></tr>
+                            <tr><td>yellowing_of_eyes</td><td class="checkmark">✅</td></tr>
+                            <tr><td>acute_liver_failure</td><td class="checkmark">✅</td></tr>
+                            <tr><td>fluid_overload</td><td class="checkmark">✅</td></tr>
+                            <tr><td>swelling_of_stomach</td><td class="checkmark">✅</td></tr>
+                            <tr><td>swelled_lymph_nodes</td><td class="checkmark">✅</td></tr>
+                            <tr><td>malaise</td><td class="checkmark">✅</td></tr>
+                            <tr><td>blurred_and__distorted_vision</td><td class="checkmark">✅</td></tr>
+                            <tr><td>phlegm</td><td class="checkmark">✅</td></tr>
+                            <tr><td>throat_irritation</td><td class="checkmark">✅</td></tr>
+                            <tr><td>redness_of_eyes</td><td class="checkmark">✅</td></tr>
+                            <tr><td>sinus_pressure</td><td class="checkmark">✅</td></tr>
+                            <tr><td>runny_nose</td><td class="checkmark">✅</td></tr>
+                            <tr><td>congestion</td><td class="checkmark">✅</td></tr>
+                            <tr><td>chest_pain</td><td class="checkmark">✅</td></tr>
+                            <tr><td>weakness_in_limbs</td><td class="checkmark">✅</td></tr>
+                            <tr><td>fast_heart_rate</td><td class="checkmark">✅</td></tr>
+                            <tr><td>pain_during_bowel_movements</td><td class="checkmark">✅</td></tr>
+                            <tr><td>pain_in_anal_region</td><td class="checkmark">✅</td></tr>
+                            <tr><td>bloody_stool</td><td class="checkmark">✅</td></tr>
+                            <tr><td>irritation_in_anus</td><td class="checkmark">✅</td></tr>
+                            <tr><td>neck_pain</td><td class="checkmark">✅</td></tr>
+                            <tr><td>dizziness</td><td class="checkmark">✅</td></tr>
+                            <tr><td>cramps</td><td class="checkmark">✅</td></tr>
+                            <tr><td>bruising</td><td class="checkmark">✅</td></tr>
+                            <tr><td>obesity</td><td class="checkmark">✅</td></tr>
+                            <tr><td>swollen_legs</td><td class="checkmark">✅</td></tr>
+                            <tr><td>swollen_blood_vessels</td><td class="checkmark">✅</td></tr>
+                            <tr><td>puffy_face_and_eyes</td><td class="checkmark">✅</td></tr>
+                            <tr><td>enlarged_thyroid</td><td class="checkmark">✅</td></tr>
+                            <tr><td>brittle_nails</td><td class="checkmark">✅</td></tr>
+                            <tr><td>swollen_extremeties</td><td class="checkmark">✅</td></tr>
+                            <tr><td>excessive_hunger</td><td class="checkmark">✅</td></tr>
+                            <tr><td>extra_marital_contacts</td><td class="checkmark">✅</td></tr>
+                            <tr><td>drying_and_tingling_lips</td><td class="checkmark">✅</td></tr>
+                            <tr><td>slurred_speech</td><td class="checkmark">✅</td></tr>
+                            <tr><td>knee_pain</td><td class="checkmark">✅</td></tr>
+                            <tr><td>hip_joint_pain</td><td class="checkmark">✅</td></tr>
+                            <tr><td>muscle_weakness</td><td class="checkmark">✅</td></tr>
+                            <tr><td>stiff_neck</td><td class="checkmark">✅</td></tr>
+                            <tr><td>swelling_joints</td><td class="checkmark">✅</td></tr>
+                            <tr><td>movement_stiffness</td><td class="checkmark">✅</td></tr>
+                            <tr><td>spinning_movements</td><td class="checkmark">✅</td></tr>
+                            <tr><td>loss_of_balance</td><td class="checkmark">✅</td></tr>
+                            <tr><td>unsteadiness</td><td class="checkmark">✅</td></tr>
+                            <tr><td>weakness_of_one_body_side</td><td class="checkmark">✅</td></tr>
+                            <tr><td>loss_of_smell</td><td class="checkmark">✅</td></tr>
+                            <tr><td>bladder_discomfort</td><td class="checkmark">✅</td></tr>
+                            <tr><td>foul_smell_ofurine</td><td class="checkmark">✅</td></tr>
+                            <tr><td>continuous_feel_of_urine</td><td class="checkmark">✅</td></tr>
+                            <tr><td>passage_of_gases</td><td class="checkmark">✅</td></tr>
+                            <tr><td>internal_itching</td><td class="checkmark">✅</td></tr>
+                            <tr><td>toxic_look_(typhos)</td><td class="checkmark">✅</td></tr>
+                            <tr><td>depression</td><td class="checkmark">✅</td></tr>
+                            <tr><td>irritability</td><td class="checkmark">✅</td></tr>
+                            <tr><td>muscle_pain</td><td class="checkmark">✅</td></tr>
+                            <tr><td>altered_sensorium</td><td class="checkmark">✅</td></tr>
+                            <tr><td>red_spots_over_body</td><td class="checkmark">✅</td></tr>
+                            <tr><td>belly_pain</td><td class="checkmark">✅</td></tr>
+                            <tr><td>abnormal_menstruation</td><td class="checkmark">✅</td></tr>
+                            <tr><td>dischromic_patches</td><td class="checkmark">✅</td></tr>
+                            <tr><td>watering_from_eyes</td><td class="checkmark">✅</td></tr>
+                            <tr><td>increased_appetite</td><td class="checkmark">✅</td></tr>
+                            <tr><td>polyuria</td><td class="checkmark">✅</td></tr>
+                            <tr><td>family_history</td><td class="checkmark">✅</td></tr>
+                            <tr><td>mucoid_sputum</td><td class="checkmark">✅</td></tr>
+                            <tr><td>rusty_sputum</td><td class="checkmark">✅</td></tr>
+                            <tr><td>lack_of_concentration</td><td class="checkmark">✅</td></tr>
+                            <tr><td>visual_disturbances</td><td class="checkmark">✅</td></tr>
+                            <tr><td>receiving_blood_transfusion</td><td class="checkmark">✅</td></tr>
+                            <tr><td>receiving_unsterile_injections</td><td class="checkmark">✅</td></tr>
+                            <tr><td>coma</td><td class="checkmark">✅</td></tr>
+                            <tr><td>stomach_bleeding</td><td class="checkmark">✅</td></tr>
+                            <tr><td>distention_of_abdomen</td><td class="checkmark">✅</td></tr>
+                            <tr><td>history_of_alcohol_consumption</td><td class="checkmark">✅</td></tr>
+                            <tr><td>fluid_overload</td><td class="checkmark">✅</td></tr>
+                            <tr><td>blood_in_sputum</td><td class="checkmark">✅</td></tr>
+                            <tr><td>prominent_veins_on_calf</td><td class="checkmark">✅</td></tr>
+                            <tr><td>palpitations</td><td class="checkmark">✅</td></tr>
+                            <tr><td>painful_walking</td><td class="checkmark">✅</td></tr>
+                            <tr><td>pus_filled_pimples</td><td class="checkmark">✅</td></tr>
+                            <tr><td>blackheads</td><td class="checkmark">✅</td></tr>
+                            <tr><td>scurring</td><td class="checkmark">✅</td></tr>
+                            <tr><td>skin_peeling</td><td class="checkmark">✅</td></tr>
+                            <tr><td>silver_like_dusting</td><td class="checkmark">✅</td></tr>
+                            <tr><td>small_dents_in_nails</td><td class="checkmark">✅</td></tr>
+                            <tr><td>inflammatory_nails</td><td class="checkmark">✅</td></tr>
+                            <tr><td>blister</td><td class="checkmark">✅</td></tr>
+                            <tr><td>red_sore_around_nose</td><td class="checkmark">✅</td></tr>
+                            <tr><td>yellow_crust_ooze</td><td class="checkmark">✅</td></tr>
+                            <tr><td>prognosis</td><td class="checkmark">✅</td></tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
 
-<!-- Precaution Modal -->
-    <div class="modal fade" id="precautionModal" tabindex="-1" aria-labelledby="precautionModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header" style="background-color: #020606; color:white;">
-                    <h5 class="modal-title" id="precautionModalLabel">Precaution</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <ul>
-                        {% for i in my_precautions %}
-                            <li>{{ i }}</li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-
-
-    <!-- Medications Modal -->
-    <div class="modal fade" id="medicationsModal" tabindex="-1" aria-labelledby="medicationsModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header" style="background-color: #020606; color:white;">
-                    <h5 class="modal-title" id="medicationsModalLabel">Medications</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <ul>
-                        {% for i in medications %}
-                            <li>{{ i }}</li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Workouts Modal -->
-    <div class="modal fade" id="workoutsModal" tabindex="-1" aria-labelledby="workoutsModalLabel" aria-hidden="true">
-        <div class="modal-dialog" >
-            <div class="modal-content">
-                <div class="modal-header" style="background-color: #020606; color:white;">
-                    <h5 class="modal-title" id="workoutsModalLabel">Workouts</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <ul>
-                        {% for i in workout %}
-                            <li>{{ i }}</li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Diets Modal -->
-    <div class="modal fade" id="dietsModal" tabindex="-1" aria-labelledby="dietsModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header" style="background-color: #020606; color:white;">
-                    <h5 class="modal-title" id="dietsModalLabel">Diets</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <ul>
-                        {% for i in my_diet %}
-                            <li>{{ i }}</li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-
-        <script>
-    const startSpeechRecognitionButton = document.getElementById('startSpeechRecognition');
-    const transcriptionDiv = document.getElementById('transcription');
-
-    startSpeechRecognitionButton.addEventListener('click', startSpeechRecognition);
-
-    function startSpeechRecognition() {
-        const recognition = new webkitSpeechRecognition(); // Use webkitSpeechRecognition for compatibility
-
-        recognition.lang = 'en-US'; // Set the language for recognition
-
-        recognition.onresult = function (event) {
-            const result = event.results[0][0].transcript;
-            transcriptionDiv.textContent = result;
-        };
-
-        recognition.onend = function () {
-            console.log('Speech recognition ended.');
-        };
-
-        recognition.start();
-    }
-</script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
-</body>
+    <script>
+        const symptomsInput = document.getElementById('symptoms');
+        const symptomsDisplay = document.getElementById('symptoms-display');
+        const predictBtn = document.getElementById('predict-btn');
+        let selectedSymptoms = new Set();
 
+        function searchSymptoms() {
+            var input, filter, table, tr, td, i, txtValue;
+            input = document.getElementById("symptomSearch");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("symptomsTable");
+            tr = table.getElementsByTagName("tr");
+
+            for (i = 0; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[0];
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "flex";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+        
+        function toggleSymptom(event) {
+            const row = event.target.closest('tr');
+            if (!row) return;
+
+            const symptom = row.cells[0].textContent;
+            
+            if (selectedSymptoms.has(symptom)) {
+                selectedSymptoms.delete(symptom);
+                row.classList.remove('selected');
+            } else {
+                selectedSymptoms.add(symptom);
+                row.classList.add('selected');
+            }
+            
+            updateSymptomDisplay();
+            updatePredictButtonState();
+        }
+
+        function updateSymptomDisplay() {
+            const symptomsArray = Array.from(selectedSymptoms);
+            const displayText = symptomsArray.join(', ');
+            symptomsDisplay.textContent = displayText;
+            symptomsInput.value = displayText;
+        }
+
+        function updatePredictButtonState() {
+            if (selectedSymptoms.size > 0) {
+                predictBtn.disabled = false;
+            } else {
+                predictBtn.disabled = true;
+            }
+        }
+
+        var symptomsModal = document.getElementById('symptomsModal')
+        symptomsModal.addEventListener('show.bs.modal', function (event) {
+            const symptomRows = document.querySelectorAll('#symptomsTable tbody tr');
+            symptomRows.forEach(row => {
+                const symptomName = row.cells[0].textContent;
+                if (selectedSymptoms.has(symptomName)) {
+                    row.classList.add('selected');
+                } else {
+                    row.classList.remove('selected');
+                }
+            });
+        });
+    </script>
+</body>
 </html>

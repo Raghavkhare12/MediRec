@@ -27,12 +27,17 @@ All models were trained on the same training data and evaluated on the same test
 
 3. Results and Discussion
 All the models trained achieved an accuracy between 97% to 99.7% on the test set. This indicates that the models were able to perfectly predict the disease given the symptoms in the test data. The confusion matrices for all models showed perfect classification with no false positives or false negatives.
-Model	Accuracy	F1 Score
-Support Vector Classifier (SVC)	99.70%	99.70%
-Random Forest Classifier	99.39%	99.39%
-Gradient Boosting Classifier	97.26%	97.10%
-K-Nearest Neighbors (KNN)	98.88%	98.83%
-Multinomial Naive Bayes	98.17%	98.19%
+Accuracy and F1 Score of different models are as respective:-
+
+* Support Vector Classifier (SVC)	99.70%,	99.70%
+
+* Random Forest Classifier	99.39%,	99.39%
+
+* Gradient Boosting Classifier	97.26%,	97.10%
+
+* K-Nearest Neighbors (KNN)	98.88%,	98.83%
+
+* Multinomial Naive Bayes	98.17%,	98.19%
 
 Given the perfect accuracy across all models, the Support Vector Classifier (SVC) was selected for the final application due to its efficiency and robustness. The trained SVC model was saved as svc.pkl to be used for predictions in the web application.
 The 99.7% accuracy, while impressive, should be interpreted with caution. The dataset, although comprehensive, may not capture the full complexity and variability of real-world medical cases. The performance in a clinical setting may differ.

@@ -10,7 +10,7 @@ app = Flask(__name__)
 
 
 
-# load databasedataset===================================
+# load databasedataset  =
 sym_des = pd.read_csv("datasets/symtoms_df.csv")
 precautions = pd.read_csv("datasets/precautions_df.csv")
 workout = pd.read_csv("datasets/workout_df.csv")
@@ -19,13 +19,13 @@ medications = pd.read_csv('datasets/medications.csv')
 diets = pd.read_csv("datasets/diets.csv")
 
 
-# load model===========================================
+# load model  =========
 svc = pickle.load(open('models/svc.pkl','rb'))
 
 
-#============================================================
+#   =========
 # custome and helping functions
-#==========================helper funtions================
+# =========helper funtions================
 def helper(dis):
     desc = description[description['Disease'] == dis]['Description']
     desc = " ".join([w for w in desc])
@@ -57,7 +57,7 @@ def get_predicted_value(patient_symptoms):
 
 
 
-# creating routes========================================
+# creating routes  ======
 
 
 @app.route("/")
